@@ -1,0 +1,40 @@
+# which general environment to run in
+Universe = vanilla
+# Universe = docker
+# docker_image = kreczko/workernode6:latest
+# which command to call
+executable = scripts/test.sh
+# arguments to the command
+#args = /etc/redhat-release
++SingularityImage = "/cvmfs/singularity.opensciencegrid.org/kreczko/workernode:centos7"
+getenv = True
+
+job_name=singularity_with_specific_machine_centos7
+# output files (per job) - the slashes are only needed for the cat command
+output = output/$(job_name).out
+error = output/$(job_name).err
+log = output/$(job_name).log
+
+# should files be transfered
+should_transfer_files = YES
+when_to_transfer_output = ON_EXIT_OR_EVICT
+
+# resource requirements
+# number of CPUs
+request_cpus = 1
+# RAM in MB
+request_memory=1
+# DISK in KB
+request_disk=100
+
+requirements = TARGET.Machine=="hd60.dice.priv"
+#requirements = TARGET.Machine=="sm23.hadoop.cluster"
+
+
+#+WantJobRouter = True
++MAGIC=true
+
+#
+# Tell HTCondor to run 1 instance of our job
+#
+queue 1
